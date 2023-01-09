@@ -1,0 +1,104 @@
+name: binary release
+
+on:
+  release:
+    # "released" events are emitted either when directly be released or be edited from pre-released.
+    types: [prereleased, released]
+
+jobs:
+  build:
+    name: binary release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - arch: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+          - arch: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+          - arch: aarch64-unknown-linux-musl
+            os: ubuntu-latest
+          - arch: armv7-unknown-linux-gnueabihf
+            os: ubuntu-latest
+          - arch: armv7-unknown-linux-musleabihf
+            os: ubuntu-latest
+          - arch: arm-unknown-linux-gnueabihf
+            os: ubuntu-latest
+          - arch: arm-unknown-linux-musleabihf
+            os: ubuntu-latest
+          - arch: x86_64-pc-windows-gnu
+            os: ubuntu-latest
+          - arch: x86_64-apple-darwin
+            os: macos-latest
+          - arch: aarch64-apple-darwin
+            os: macos-latest
+
+    runs-on: ${{ matrix.os }}
+    env:
+      NAME: kitsuyui-rust-playground  # executable binary name
+      ARCH: ${{ matrix.arch }}
+      OS: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          target: ${{ matrix.arch }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.os }}-${{ matrix.arch }}
+      - name: Install dependencies
+        run: |
+          if [[ $OS =~ ^.*ubuntu.*$ ]]; then
+              sudo apt-get install -qq crossbuild-essential-arm64 crossbuild-essential-armhf mingw-w64
+          fi
+      - name: Build target
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --verbose --target ${{ matrix.arch }}
+
+      - name: Compress
+        run: |
+          mkdir -p ./artifacts
+          if [[ $ARCH =~ ^.*windows.*$ ]]; then
+              EXEC=$NAME.exe
+          else
+              EXEC=$NAME
+          fi
+          if [[ $GITHUB_REF_TYPE =~ ^tag$ ]]; then
+            TAG=$GITHUB_REF_NAME
+          else
+            TAG=$GITHUB_SHA
+          fi
+          mv ./target/$ARCH/release/$EXEC ./$EXEC
+          tar -czf ./artifacts/$NAME-$ARCH-$TAG.tar.gz $EXEC
+
+      - name: Archive artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: result
+          path: |
+            ./artifacts
+
+  deploy:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: result
+          path: ./artifacts
+      - name: List
+        run: find ./artifacts
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./artifacts/*.tar.gz
