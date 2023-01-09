@@ -1,5 +1,8 @@
 # rust-playground
 
+[![Crates.io](https://img.shields.io/crates/d/kitsuyui-rust-playground)](https://crates.io/crates/kitsuyui-rust-playground)
+[![crates.io-LICENSE](https://img.shields.io/crates/l/kitsuyui-rust-playground)](https://github.com/kitsuyui/rust-playground#license)
+
 ## en: What is this?
 
 This is my personal Rust playground.
