@@ -2,6 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/d/kitsuyui-rust-playground)](https://crates.io/crates/kitsuyui-rust-playground)
 [![crates.io-LICENSE](https://img.shields.io/crates/l/kitsuyui-rust-playground)](https://github.com/kitsuyui/rust-playground#license)
+[![codecov](https://codecov.io/gh/kitsuyui/rust-playground/branch/main/graph/badge.svg?token=6WIF2MIHWQ)](https://codecov.io/gh/kitsuyui/rust-playground)
 
 ## en: What is this?
 
