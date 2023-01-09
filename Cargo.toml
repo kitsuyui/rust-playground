@@ -9,3 +9,8 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+boa_engine = "0.16.0"
+headless_chrome = "1.0.1"
+html5ever = "0.26.0"
+serde = "1.0.152"
+tokio = "1.24.1"

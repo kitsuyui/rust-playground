@@ -1,48 +1,99 @@
 name: tests
 on: [push]
+
 jobs:
-  tests:
-    name: tests
+  check:
+    name: Check
     runs-on: ubuntu-latest
-    env:
-      # For incremental builds
-      CARGO_INCREMENTAL: 1
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        # For incremental builds
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
         with:
-          fetch-depth: 0
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: git-restore-mtime  # For incremental builds
-        uses: chetan/git-restore-mtime-action@v1.2
-
-      - uses: actions/cache@v3
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions-rs/cargo@v1
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          command: check
 
-      - name: check formatting
-        run: cargo fmt --all -- --check
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
 
-      - name: clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - run: rustup component add rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
 
-      - name: check build
-        run: cargo check
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - run: rustup component add clippy
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
 
-      - name: Coverage
-        run: |
-          cargo install cargo-llvm-cov || true  # when already cached
-          cargo llvm-cov --lcov --output-path coverage.lcov
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - run: |
+          rustup component add llvm-tools-preview
+          cargo install cargo-llvm-cov || true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: llvm-cov
+          args: --lcov --output-path coverage.lcov
 
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v3
