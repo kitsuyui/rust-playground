@@ -56,7 +56,8 @@ jobs:
           fi
       - name: Build target
         run: |
-          cargo build --release --verbose --target $ARCH
+          cargo install cross
+          cross build --release --verbose --target $ARCH
 
       - name: Compress
         run: |
