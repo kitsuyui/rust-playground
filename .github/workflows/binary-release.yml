@@ -51,8 +51,12 @@ jobs:
           key: ${{ matrix.os }}-${{ matrix.arch }}
       - name: Build target
         run: |
-          cargo install cross
-          cross build --release --verbose --target $ARCH
+          if [[ $OS =~ ^.*ubuntu.*$ ]]; then
+            cargo install cross
+            cross build --release --verbose --target $ARCH
+          elif [[ $OS =~ ^.*macos.*$ ]]; then
+            cargo build --release --verbose --target $ARCH
+          fi
 
       - name: Compress
         run: |
