@@ -5,3 +5,10 @@ edition = "2021"
 authors = ["Yui Kitsu <kitsuyui+github@kitsuyui.com>"]
 description = "Here is my Rust playground."
 license = "MIT OR Apache-2.0"
+
+[dependencies]
+openssl-probe = "0.1.5"
+
+[dependencies.openssl]
+version = "0.10.45"
+features = ["vendored"]
