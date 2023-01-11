@@ -11,9 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
-      - run: |
-          cargo install cargo-edit
-          cargo set-version ${{ github.event.release.tag_name }}
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --all-features
 
