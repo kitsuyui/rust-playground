@@ -52,6 +52,8 @@ jobs:
       - name: Build target
         run: |
           cargo install cross
+          cargo install cargo-edit
+          cargo set-version ${{ github.event.release.tag_name }}
           cross build --release --verbose --target $ARCH
 
       - name: Compress
