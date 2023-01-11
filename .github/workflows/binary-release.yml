@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     name: binary release
+    env:
+      NAME: kitsuyui-rust-playground  # executable binary name
+      ARCH: ${{ matrix.arch }}
+      OS: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -37,10 +41,6 @@ jobs:
             os: macos-latest
 
     runs-on: ${{ matrix.os }}
-    env:
-      NAME: kitsuyui-rust-playground  # executable binary name
-      ARCH: ${{ matrix.arch }}
-      OS: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
