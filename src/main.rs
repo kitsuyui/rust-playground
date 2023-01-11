@@ -1,3 +1,4 @@
 fn main() {
-    println!("Hello, world!");
+    let version = openssl::version::version();
+    println!("OpenSSL version: {}", version);
 }
