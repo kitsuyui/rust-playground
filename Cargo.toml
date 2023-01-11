@@ -7,4 +7,8 @@ description = "Here is my Rust playground."
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-openssl = "0.10.45"
+openssl-probe = "0.1.5"
+
+[dependencies.openssl]
+version = "0.10.45"
+features = ["vendored"]
