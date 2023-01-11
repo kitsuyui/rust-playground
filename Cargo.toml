@@ -8,6 +8,7 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 openssl-probe = "0.1.5"
+openssl-sys = "0.9.80"
 
 [dependencies.openssl]
 version = "0.10.45"
