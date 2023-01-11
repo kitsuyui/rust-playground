@@ -49,11 +49,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.os }}-${{ matrix.arch }}
-      - name: Install dependencies
-        run: |
-          if [[ $OS =~ ^.*ubuntu.*$ ]]; then
-              sudo apt-get install -qq crossbuild-essential-arm64 crossbuild-essential-armhf mingw-w64
-          fi
       - name: Build target
         run: |
           cargo install cross
