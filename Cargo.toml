@@ -9,6 +9,8 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 openssl-probe = "0.1.5"
 reqwest = { version = "0.11.13", features = ["blocking"] }
+ring = "0.16.20"
+hex = "0.4.3"
 [dependencies.openssl]
 version = "0.10.45"
 features = ["vendored"]
