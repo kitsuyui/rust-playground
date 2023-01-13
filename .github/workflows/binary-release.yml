@@ -33,7 +33,7 @@ jobs:
             os: ubuntu-latest
             package: gcc-aarch64-linux-gnu musl-tools
             gcc: aarch64-linux-gnu-gcc
-            cflags: -D_FORTIFY_SOURCE=0
+            cflags: -U_FORTIFY_SOURCE
           - arch: armv7-unknown-linux-gnueabihf
             os: ubuntu-latest
             package: gcc-arm-linux-gnueabihf
@@ -42,7 +42,7 @@ jobs:
             os: ubuntu-latest
             package: gcc-arm-linux-gnueabihf musl-tools
             gcc: arm-linux-gnueabihf-gcc
-            cflags: -D_FORTIFY_SOURCE=0
+            cflags: -U_FORTIFY_SOURCE
           - arch: arm-unknown-linux-gnueabihf
             os: ubuntu-latest
             package: gcc-arm-linux-gnueabihf
@@ -50,7 +50,7 @@ jobs:
           - arch: arm-unknown-linux-musleabihf
             os: ubuntu-latest
             package: gcc-arm-linux-gnueabihf musl-tools
-            cflags: -D_FORTIFY_SOURCE=0
+            cflags: -U_FORTIFY_SOURCE
             gcc: arm-linux-gnueabihf-gcc
           - arch: x86_64-pc-windows-gnu
             os: ubuntu-latest
