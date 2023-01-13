@@ -326,6 +326,7 @@ dependencies = [
  "openssl-probe",
  "reqwest",
  "ring",
+ "tokio",
 ]
 
 [[package]]
