@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: binary release
+    name: build ${{ matrix.arch }} on ${{ matrix.os }} with ${{ matrix.gcc }}
     env:
       NAME: kitsuyui-rust-playground  # executable binary name
       ARCH: ${{ matrix.arch }}
