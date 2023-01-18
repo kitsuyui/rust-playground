@@ -1,0 +1,17 @@
+[package]
+name = "kitsuyui-rust-playground"
+version = "0.1.4"
+edition = "2021"
+authors = ["Yui Kitsu <kitsuyui+github@kitsuyui.com>"]
+description = "Here is my Rust playground."
+license = "MIT OR Apache-2.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+openssl-probe.workspace = true
+reqwest.workspace = true
+ring.workspace = true
+hex.workspace = true
+tokio.workspace = true
+openssl.workspace = true
