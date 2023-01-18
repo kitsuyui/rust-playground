@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "kitsuyui_rust_playground"
+version = "0.1.5"
+description = ""
+authors = ["kitsuyui <kitsuyui@kitsuyui.com>"]
+readme = "README.md"
+packages = []
+
+[project]
+name = "kitsuyui_rust_playground"
+
+[build-system]
+requires = ["maturin>=0.13,<0.14"]
+build-backend = "maturin"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pytest-cov = "*"
+atomicwrites = "*"
