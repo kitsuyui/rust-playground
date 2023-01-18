@@ -319,7 +319,7 @@ dependencies = [
 
 [[package]]
 name = "kitsuyui-rust-playground"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "hex",
  "openssl",
@@ -331,7 +331,7 @@ dependencies = [
 
 [[package]]
 name = "kitsuyui-rust-playground-lib"
-version = "0.1.4"
+version = "0.1.5"
 
 [[package]]
 name = "lazy_static"
