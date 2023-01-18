@@ -1,17 +1,16 @@
-[package]
-name = "kitsuyui-rust-playground"
-version = "0.1.4"
-edition = "2021"
-authors = ["Yui Kitsu <kitsuyui+github@kitsuyui.com>"]
-description = "Here is my Rust playground."
-license = "MIT OR Apache-2.0"
-
-[dependencies]
+[workspace.dependencies]
 openssl-probe = "0.1.5"
 reqwest = { version = "0.11.13", features = ["blocking"] }
 ring = "0.16.20"
 hex = "0.4.3"
 tokio = "1.24.2"
-[dependencies.openssl]
+[workspace.dependencies.openssl]
 version = "0.10.45"
 features = ["vendored"]
+
+[workspace]
+
+members = [
+    "c1",
+    "c2",
+]
