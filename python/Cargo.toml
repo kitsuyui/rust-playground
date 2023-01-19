@@ -1,0 +1,20 @@
+[package]
+name = "python"
+version = "0.1.17"
+edition = "2021"
+
+[lib]
+name = "kitsuyui_rust_playground"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3.workspace = true
+kitsuyui-rust-playground-lib = { path = "../c2" }
+pyo3-build-config.workspace = true
+
+[dev-dependencies]
+maturin = "0.14.10"
+
+[package.metadata.maturin]
+
+python-source = "pysrc"
