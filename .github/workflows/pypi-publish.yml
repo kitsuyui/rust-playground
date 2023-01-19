@@ -27,20 +27,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - uses: abatilo/actions-poetry@v2
 
-      - name: Cache
-        id: cache_poetry_and_rust
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            ~/.local/share/virtualenvs
-            target/
-            !target/wheels
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}-pipenv-${{ matrix.python }}-${{ hashFiles('**/poetry.lock') }}
-
       - if: ${{ steps.cache_poetry_and_rust.outputs.cache-hit != 'true' }}
         name: Install dependencies
         run: |

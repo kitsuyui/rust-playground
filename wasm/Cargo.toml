@@ -1,0 +1,19 @@
+[package]
+name = "kitsuyui-rust-playground-wasm"
+description = "Rust Playground for WebAssembly"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/kitsuyui/rust-playground"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+wasm-bindgen = "0.2.83"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.33"
