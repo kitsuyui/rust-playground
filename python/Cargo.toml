@@ -1,7 +1,10 @@
 [package]
 name = "python"
-version = "0.1.17"
-edition = "2021"
+description = "Python bindings for kitsuyui-rust-playground"
+license = "MIT OR Apache-2.0"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
 
 [lib]
 name = "kitsuyui_rust_playground"
