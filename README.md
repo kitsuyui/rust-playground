@@ -37,7 +37,7 @@ I'm going to try to speed up CI and publish binaries on crates.io.
 - [ ] WASM
 - [ ] FFI
   - [ ] Node.js binding
-  - [ ] Python binding
+  - [x] Python binding
 
 ## License
 
