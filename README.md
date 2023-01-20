@@ -34,9 +34,9 @@ I'm going to try to speed up CI and publish binaries on crates.io.
   - [x] x86_64-unknown-linux-gnu
   - [x] x86_64-unknown-linux-musl
 - [x] Publish lib crate to crates.io
-- [ ] WASM
-- [ ] FFI
-  - [ ] Node.js binding
+- [x] WASM
+- [x] FFI
+  - [x] Node.js binding
   - [x] Python binding
 
 ## License
