@@ -2,22 +2,22 @@ fn main() {
     show_openssl_version();
     reqest_to_example_com();
     let digest = get_digest();
-    println!("Digest: {}", digest);
+    println!("Digest: {digest}");
     match tokio::runtime::Runtime::new() {
         Ok(rt) => {
             if let Err(err) = rt.block_on(tokio_example()) {
-                println!("Error: {}", err);
+                println!("Error: {err}");
             }
         }
         Err(err) => {
-            println!("Error: {}", err);
+            println!("Error: {err}");
         }
     }
 }
 
 fn show_openssl_version() {
     let version = openssl::version::version();
-    println!("OpenSSL version: {}", version);
+    println!("OpenSSL version: {version}");
 }
 
 fn get_digest() -> String {
@@ -39,15 +39,15 @@ fn reqest_to_example_com() {
             println!("Headers:\n{:#?}", res.headers());
             match res.text() {
                 Ok(body) => {
-                    println!("Body:\n{}", body);
+                    println!("Body:\n{body}");
                 }
                 Err(err) => {
-                    println!("Error: {}", err);
+                    println!("Error: {err}");
                 }
             }
         }
         Err(err) => {
-            println!("Error: {}", err);
+            println!("Error: {err}");
         }
     }
 }
