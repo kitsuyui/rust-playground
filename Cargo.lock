@@ -1260,9 +1260,9 @@ dependencies = [
 
 [[package]]
 name = "maturin"
-version = "0.14.10"
+version = "0.14.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58300bc36bac30766ac70d807a13378672a864fe7877ba8b842d2bf5ce53feb6"
+checksum = "cd82818aee0879ebd4c23beab53df94a7ed2de2053636bd1ab987a257ba870d7"
 dependencies = [
  "anyhow",
  "base64 0.13.1",
@@ -1359,9 +1359,9 @@ dependencies = [
 
 [[package]]
 name = "minijinja"
-version = "0.28.0"
+version = "0.30.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea571551ee271bbed113dc8e82fce0131a0c80f2f7656c31e0e47594339d4037"
+checksum = "18b0af1900a114a8183b10b4266a9a4fc2816afdb7089592492c8eadd07f1629"
 dependencies = [
  "serde",
 ]
