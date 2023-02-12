@@ -16,7 +16,7 @@ kitsuyui-rust-playground-lib = { path = "../c2" }
 pyo3-build-config.workspace = true
 
 [dev-dependencies]
-maturin = "0.14.12"
+maturin = "0.14.13"
 
 [package.metadata.maturin]
 

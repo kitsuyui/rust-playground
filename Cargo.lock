@@ -1260,9 +1260,9 @@ dependencies = [
 
 [[package]]
 name = "maturin"
-version = "0.14.12"
+version = "0.14.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd82818aee0879ebd4c23beab53df94a7ed2de2053636bd1ab987a257ba870d7"
+checksum = "2c19982c0b8742991b41a8ef97c8fad8e534f9dfdce841a748fbacdc669ca460"
 dependencies = [
  "anyhow",
  "base64 0.13.1",
