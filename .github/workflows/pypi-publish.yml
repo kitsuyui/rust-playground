@@ -31,7 +31,6 @@ jobs:
         name: Install dependencies
         run: |
           poetry install
-          cargo install maturin
 
       - name: Check Python version
         if: matrix.os != 'windows-latest'
