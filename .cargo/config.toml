@@ -1,3 +1,7 @@
+[registries.crates-io]
+# The sparse protocol is currently planned to become the default for crates.io in the 1.70.0 release in a few months.
+protocol = "sparse"
+
 [target.'cfg(all())']
 rustflags = [
     "-Wclippy::fallible_impl_from",
