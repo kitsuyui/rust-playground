@@ -1,6 +1,6 @@
 fn main() {
     show_openssl_version();
-    reqest_to_example_com();
+    request_to_example_com();
     let digest = get_digest();
     println!("Digest: {digest}");
     match tokio::runtime::Runtime::new() {
@@ -31,7 +31,7 @@ async fn tokio_example() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn reqest_to_example_com() {
+fn request_to_example_com() {
     let client = reqwest::blocking::Client::new();
     match client.get("https://example.com").send() {
         Ok(res) => {
