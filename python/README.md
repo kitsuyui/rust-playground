@@ -7,7 +7,7 @@ from kitsuyui_rust_playground import my_calc
 my_calc(1, 2, 3)  # => '9'
 ```
 
-`my_calc` is implememented by Rust (with PyO3). 
+`my_calc` is implemented by Rust (with PyO3). 
 However it works as same as following python code:
 
 ```python
