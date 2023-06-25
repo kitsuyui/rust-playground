@@ -18,7 +18,7 @@ jobs:
           cargo install wasm-pack
           # wasm-pack test --node --firefox --chrome --safari --headless
           wasm-pack build --release --target bundler --scope kitsuyui
-          wasm-pack pack pkg
+          wasm-pack pack
 
   publish:
     name: Publish
