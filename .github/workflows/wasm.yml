@@ -1,6 +1,8 @@
 name: publish-wasm-package-to-npm
 
-on: [push]
+on:
+  - push
+  - pull_request
 jobs:
   test_and_build:
     name: Test and Build
