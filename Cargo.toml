@@ -15,7 +15,7 @@ pyo3 = { version = "0.19.2", features = ["extension-module"] }
 pyo3-build-config = "0.19.2"
 
 [workspace.dependencies.openssl]
-version = "0.10.56"
+version = "0.10.57"
 features = ["vendored"]
 
 [workspace]
