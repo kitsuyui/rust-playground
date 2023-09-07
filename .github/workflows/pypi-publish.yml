@@ -1,7 +1,6 @@
 name: Test build Python packages
 
 on:
-  - push
   - pull_request
 jobs:
   test_and_build:
