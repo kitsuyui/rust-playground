@@ -1,7 +1,6 @@
 name: Test build Python packages
 
 on:
-  - push
   - pull_request
 jobs:
   test_and_build:
@@ -9,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python: ["3.8", "3.9", "3.10", "3.11"]
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         # TODO: arch is not supported yet (arm64, i386, x86_64, ...)
     defaults:
