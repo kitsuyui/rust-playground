@@ -40,7 +40,6 @@ jobs:
             ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.os }}-${{ matrix.python }}-poetry-
 
-
       - uses: actions/cache@v3
         name: poetry cache
         if: runner.os == 'macOS'
@@ -49,7 +48,6 @@ jobs:
           key: |
             ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.os }}-${{ matrix.python }}-poetry-
-
 
       - uses: actions/cache@v3
         name: poetry cache
@@ -117,18 +115,18 @@ jobs:
           path: target/wheels/
 
       - name: Publish distribution to Test PyPI
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         if: github.event_name == 'release' && github.event.release.prerelease
         with:
-          packages_dir: target/wheels/
+          packages-dir: target/wheels/
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
+          repository-url: https://test.pypi.org/legacy/
 
       - name: Publish distribution to PyPI
         if: github.event_name == 'release' && !github.event.release.prerelease
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages_dir: target/wheels/
+          packages-dir: target/wheels/
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
