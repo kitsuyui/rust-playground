@@ -88,9 +88,10 @@ jobs:
           path: |
             ${{ matrix.poetry_tool_cache }}
             ${{ matrix.poetry_cache_path }}
-          key: |
+          restore-keys: |
             ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.os }}-${{ matrix.python }}-poetry-
+          key: ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
       - uses: abatilo/actions-poetry@v2
       - name: Install python dependencies
