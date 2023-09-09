@@ -1,7 +1,12 @@
 name: publish-wasm-package-to-npm
 
 on:
-  - pull_request
+  pull_request:
+    types: [opened, synchronize, reopened]
+  release:
+    # "released" events are emitted either when directly be released or be edited from pre-released.
+    types: [prereleased, released]
+
 jobs:
   test_and_build:
     name: Test and Build
