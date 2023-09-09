@@ -21,50 +21,82 @@ jobs:
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
             poetry_tool_cache: "/opt/hostedtoolcache/Python"
+            rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.9"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
             poetry_tool_cache: "/opt/hostedtoolcache/Python/"
+            rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.10"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
             poetry_tool_cache: "/opt/hostedtoolcache/Python/"
+            rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.11"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
             poetry_tool_cache: "/opt/hostedtoolcache/Python/"
+            rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.8"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
             poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "x86_64-apple-darwin"
           - python: "3.9"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
             poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "x86_64-apple-darwin"
           - python: "3.10"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
             poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "x86_64-apple-darwin"
           - python: "3.11"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
             poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "x86_64-apple-darwin"
+          - python: "3.8"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "aarch64-apple-darwin"
+          - python: "3.9"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "aarch64-apple-darwin"
+          - python: "3.10"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "aarch64-apple-darwin"
+          - python: "3.11"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
+            rust_target: "aarch64-apple-darwin"
           - python: "3.8"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
+            rust_target: "x86_64-pc-windows-msvc"
           - python: "3.9"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
+            rust_target: "x86_64-pc-windows-msvc"
           - python: "3.10"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
+            rust_target: "x86_64-pc-windows-msvc"
           - python: "3.11"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
+            rust_target: "x86_64-pc-windows-msvc"
 
         # TODO: arch is not supported yet (arm64, i386, x86_64, ...)
     defaults:
@@ -107,21 +139,10 @@ jobs:
             exit 1
           fi
 
-      - name: packaging linux
-        if: matrix.os == 'ubuntu-latest'
-        run: poetry run maturin build --release --strip --interpreter python${{ matrix.python }}
-
-      - name: packaging windows
-        if: matrix.os == 'windows-latest'
-        run: poetry run maturin build --release --strip --interpreter python${{ matrix.python }}
-
-      - name: packaging darwin
-        if: matrix.os == 'macos-latest'
+      - name: packaging
         run: |
-          rustup target add x86_64-apple-darwin
-          rustup target add aarch64-apple-darwin
-          poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target x86_64-apple-darwin
-          poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target aarch64-apple-darwin
+          rustup target add ${{ matrix.rust_target }}
+          poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
 
       - name: test
         if: matrix.os != 'windows-latest'
