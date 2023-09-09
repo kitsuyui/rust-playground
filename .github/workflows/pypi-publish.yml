@@ -13,8 +13,44 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.8", "3.9", "3.10", "3.11"]
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        include:
+          - python: "3.8"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+          - python: "3.9"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+          - python: "3.10"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+          - python: "3.11"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+          - python: "3.8"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+          - python: "3.9"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+          - python: "3.10"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+          - python: "3.11"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+          - python: "3.8"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+          - python: "3.9"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+          - python: "3.10"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+          - python: "3.11"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+
         # TODO: arch is not supported yet (arm64, i386, x86_64, ...)
     defaults:
       run:
@@ -33,27 +69,8 @@ jobs:
 
       - uses: actions/cache@v3
         name: poetry cache
-        if: runner.os == 'Linux'
         with:
-          path: ~/.cache/pypoetry
-          key: |
-            ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
-            ${{ runner.os }}-${{ matrix.python }}-poetry-
-
-      - uses: actions/cache@v3
-        name: poetry cache
-        if: runner.os == 'macOS'
-        with:
-          path: ~/Library/Caches/pypoetry
-          key: |
-            ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
-            ${{ runner.os }}-${{ matrix.python }}-poetry-
-
-      - uses: actions/cache@v3
-        name: poetry cache
-        if: runner.os == 'Windows'
-        with:
-          path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+          path: ${{ matrix.poetry_cache_path }}
           key: |
             ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.os }}-${{ matrix.python }}-poetry-
