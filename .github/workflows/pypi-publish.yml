@@ -1,22 +1,90 @@
-name: Test build Python packages
+name: python
 
 on:
-  - pull_request
+  pull_request:
+    types: [opened, synchronize, reopened]
+  release:
+    # "released" events are emitted either when directly be released or be edited from pre-released.
+    types: [prereleased, released]
+
 jobs:
-  test_and_build:
+  build:
     runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}-py${{ matrix.python }}-${{ matrix.rust_target }}
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.8", "3.9", "3.10", "3.11"]
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-        # TODO: arch is not supported yet (arm64, i386, x86_64, ...)
+        include:
+          - python: "3.8"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+            rust_target: "x86_64-unknown-linux-gnu"
+          - python: "3.9"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+            rust_target: "x86_64-unknown-linux-gnu"
+          - python: "3.10"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+            rust_target: "x86_64-unknown-linux-gnu"
+          - python: "3.11"
+            os: "ubuntu-latest"
+            poetry_cache_path: "~/.cache/pypoetry"
+            rust_target: "x86_64-unknown-linux-gnu"
+          - python: "3.8"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "x86_64-apple-darwin"
+          - python: "3.9"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "x86_64-apple-darwin"
+          - python: "3.10"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "x86_64-apple-darwin"
+          - python: "3.11"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "x86_64-apple-darwin"
+          - python: "3.8"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "aarch64-apple-darwin"
+          - python: "3.9"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "aarch64-apple-darwin"
+          - python: "3.10"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "aarch64-apple-darwin"
+          - python: "3.11"
+            os: "macos-latest"
+            poetry_cache_path: "~/Library/Caches/pypoetry"
+            rust_target: "aarch64-apple-darwin"
+          - python: "3.8"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            rust_target: "x86_64-pc-windows-msvc"
+          - python: "3.9"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            rust_target: "x86_64-pc-windows-msvc"
+          - python: "3.10"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            rust_target: "x86_64-pc-windows-msvc"
+          - python: "3.11"
+            os: "windows-latest"
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            rust_target: "x86_64-pc-windows-msvc"
+
     defaults:
       run:
         working-directory: python
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         id: setup-python
@@ -25,13 +93,41 @@ jobs:
           python-version: "${{ matrix.python }}"
 
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_target }}
       - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: ${{ matrix.os }}-${{ matrix.rust_target }}-
+
+      - uses: actions/cache@v3
+        name: poetry cache
+        with:
+          path: ${{ matrix.poetry_cache_path }}
+          restore-keys: |
+            poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
+            poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
+            poetry-${{ runner.os }}-${{ matrix.python }}-
+          key: poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
+
       - uses: abatilo/actions-poetry@v2
 
-      - if: ${{ steps.cache_poetry_and_rust.outputs.cache-hit != 'true' }}
-        name: Install dependencies
+      - name: Setup a virtual environment
         run: |
-          poetry install
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+
+      - uses: actions/cache@v3
+        name: python package cache
+        with:
+          path: ./.venv
+          restore-keys: |
+            python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
+            python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
+            python-venv-${{ runner.os }}-${{ matrix.python }}-
+          key: python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install python dependencies
+        run: poetry install
 
       - name: Check Python version
         if: matrix.os != 'windows-latest'
@@ -43,21 +139,9 @@ jobs:
             exit 1
           fi
 
-      - name: packaging linux
-        if: matrix.os == 'ubuntu-latest'
-        run: poetry run maturin build --release --strip --interpreter python${{ matrix.python }}
-
-      - name: packaging windows
-        if: matrix.os == 'windows-latest'
-        run: poetry run maturin build --release --strip --interpreter python${{ matrix.python }}
-
-      - name: packaging darwin
-        if: matrix.os == 'macos-latest'
+      - name: packaging
         run: |
-          rustup target add x86_64-apple-darwin
-          rustup target add aarch64-apple-darwin
-          poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target x86_64-apple-darwin
-          poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target aarch64-apple-darwin
+          poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
 
       - name: test
         if: matrix.os != 'windows-latest'
@@ -77,7 +161,7 @@ jobs:
           path: target/wheels/
 
   publish:
-    needs: test_and_build
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
@@ -86,18 +170,18 @@ jobs:
           path: target/wheels/
 
       - name: Publish distribution to Test PyPI
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         if: github.event_name == 'release' && github.event.release.prerelease
         with:
-          packages_dir: target/wheels/
+          packages-dir: target/wheels/
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
+          repository-url: https://test.pypi.org/legacy/
 
       - name: Publish distribution to PyPI
         if: github.event_name == 'release' && !github.event.release.prerelease
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages_dir: target/wheels/
+          packages-dir: target/wheels/
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
