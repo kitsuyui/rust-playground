@@ -1,4 +1,4 @@
-name: Test build Python packages
+name: python
 
 on:
   pull_request:
@@ -11,8 +11,9 @@ env:
   MACOS_POETRY_CACHE_PATH: "~/Library/Caches/pypoetry"
 
 jobs:
-  test_and_build:
+  build:
     runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}-py${{ matrix.python }}-${{ matrix.rust_target }}
     strategy:
       fail-fast: false
       matrix:
@@ -162,7 +163,7 @@ jobs:
           path: target/wheels/
 
   publish:
-    needs: test_and_build
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
