@@ -110,6 +110,8 @@ jobs:
           python-version: "${{ matrix.python }}"
 
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_target }}
       - uses: Swatinem/rust-cache@v2
         with:
           prefix-key: ${{ matrix.os }}-${{ matrix.rust_target }}-
@@ -141,7 +143,6 @@ jobs:
 
       - name: packaging
         run: |
-          rustup target add ${{ matrix.rust_target }}
           poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
 
       - name: test
