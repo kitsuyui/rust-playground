@@ -7,9 +7,6 @@ on:
     # "released" events are emitted either when directly be released or be edited from pre-released.
     types: [prereleased, released]
 
-env:
-  MACOS_POETRY_CACHE_PATH: "~/Library/Caches/pypoetry"
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
