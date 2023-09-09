@@ -67,9 +67,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.arch }}
-      - uses: Swatinem/rust-cache@v2
+      - uses: mozilla-actions/sccache-action@v0.0.3
         with:
-          key: ${{ matrix.os }}-${{ matrix.arch }}
+          version: "v0.5.2"
       - name: Build target
         run: |
           if [[ $OS =~ ^.*ubuntu.*$ ]]; then
@@ -79,6 +79,9 @@ jobs:
           elif [[ $OS =~ ^.*macos.*$ ]]; then
             cargo build --release --verbose --target $ARCH
           fi
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
       - name: Compress
         run: |

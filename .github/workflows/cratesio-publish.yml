@@ -13,8 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          version: "v0.5.2"
       - run: cargo build --release --all-features
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
       - name: publish (dry-run)
         if: github.event_name == 'release' && github.event.release.prerelease

@@ -8,8 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          version: "v0.5.2"
       - run: cargo check
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
   test:
     name: Test
@@ -17,8 +22,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          version: "v0.5.2"
       - run: cargo test
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
   format:
     name: Format
@@ -28,8 +38,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
-      - uses: Swatinem/rust-cache@v2
+      - uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          version: "v0.5.2"
       - run: cargo fmt --all -- --check
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
   lint:
     name: Lint
@@ -39,8 +54,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
-      - uses: Swatinem/rust-cache@v2
+      - uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          version: "v0.5.2"
       - run: cargo clippy -- -D warnings
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
   build:
     name: Build
@@ -48,8 +68,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          version: "v0.5.2"
       - run: cargo build
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
   coverage:
     name: Coverage
@@ -59,10 +84,14 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: llvm-tools-preview
-      - uses: Swatinem/rust-cache@v2
-      - run: |
-          cargo install cargo-llvm-cov || true
-          cargo llvm-cov --lcov --output-path coverage.lcov
+      - uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          version: "v0.5.2"
+      - run: cargo install cargo-llvm-cov || true
+      - run: cargo llvm-cov --lcov --output-path coverage.lcov
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
 
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v3
