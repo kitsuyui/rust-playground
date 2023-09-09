@@ -18,85 +18,68 @@ jobs:
           - python: "3.8"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
-            poetry_tool_cache: "/opt/hostedtoolcache/Python"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.9"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
-            poetry_tool_cache: "/opt/hostedtoolcache/Python/"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.10"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
-            poetry_tool_cache: "/opt/hostedtoolcache/Python/"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.11"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
-            poetry_tool_cache: "/opt/hostedtoolcache/Python/"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.8"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "x86_64-apple-darwin"
           - python: "3.9"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "x86_64-apple-darwin"
           - python: "3.10"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "x86_64-apple-darwin"
           - python: "3.11"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "x86_64-apple-darwin"
           - python: "3.8"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "aarch64-apple-darwin"
           - python: "3.9"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "aarch64-apple-darwin"
           - python: "3.10"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "aarch64-apple-darwin"
           - python: "3.11"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
-            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
             rust_target: "aarch64-apple-darwin"
           - python: "3.8"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
-            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
             rust_target: "x86_64-pc-windows-msvc"
           - python: "3.9"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
-            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
             rust_target: "x86_64-pc-windows-msvc"
           - python: "3.10"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
-            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
             rust_target: "x86_64-pc-windows-msvc"
           - python: "3.11"
             os: "windows-latest"
             poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
-            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
             rust_target: "x86_64-pc-windows-msvc"
 
-        # TODO: arch is not supported yet (arm64, i386, x86_64, ...)
     defaults:
       run:
         working-directory: python
@@ -119,15 +102,30 @@ jobs:
       - uses: actions/cache@v3
         name: poetry cache
         with:
-          path: |
-            ${{ matrix.poetry_tool_cache }}
-            ${{ matrix.poetry_cache_path }}
+          path: ${{ matrix.poetry_cache_path }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
-            ${{ runner.os }}-${{ matrix.python }}-poetry-
-          key: ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
+            poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
+            poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
+            poetry-${{ runner.os }}-${{ matrix.python }}-
+          key: poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
 
       - uses: abatilo/actions-poetry@v2
+
+      - name: Setup a virtual environment
+        run: |
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+
+      - uses: actions/cache@v3
+        name: python package cache
+        with:
+          path: ./.venv
+          restore-keys: |
+            python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
+            python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
+            python-venv-${{ runner.os }}-${{ matrix.python }}-
+          key: python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
+
       - name: Install python dependencies
         run: poetry install
 
