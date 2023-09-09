@@ -110,9 +110,9 @@ jobs:
           python-version: "${{ matrix.python }}"
 
       - uses: dtolnay/rust-toolchain@stable
-      - uses: mozilla-actions/sccache-action@v0.0.3
+      - uses: Swatinem/rust-cache@v2
         with:
-          version: "v0.5.2"
+          prefix-key: ${{ matrix.os }}-${{ matrix.rust_target }}-
 
       - uses: actions/cache@v3
         name: poetry cache
@@ -143,9 +143,6 @@ jobs:
         run: |
           rustup target add ${{ matrix.rust_target }}
           poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
-        env:
-          SCCACHE_GHA_ENABLED: "true"
-          RUSTC_WRAPPER: "sccache"
 
       - name: test
         if: matrix.os != 'windows-latest'

@@ -17,17 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: mozilla-actions/sccache-action@v0.0.3
-        with:
-          version: "v0.5.2"
+      - uses: Swatinem/rust-cache@v2
+
       - run: |
           cargo install wasm-pack
           # wasm-pack test --node --firefox --chrome --safari --headless
           wasm-pack build --release --target bundler --scope kitsuyui
           wasm-pack pack
-        env:
-          SCCACHE_GHA_ENABLED: "true"
-          RUSTC_WRAPPER: "sccache"
 
   publish:
     name: Publish
