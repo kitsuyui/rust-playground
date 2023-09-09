@@ -7,6 +7,9 @@ on:
     # "released" events are emitted either when directly be released or be edited from pre-released.
     types: [prereleased, released]
 
+env:
+  MACOS_POETRY_CACHE_PATH: "~/Library/Caches/pypoetry"
+
 jobs:
   test_and_build:
     runs-on: ${{ matrix.os }}
@@ -17,39 +20,51 @@ jobs:
           - python: "3.8"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
+            poetry_tool_cache: "/opt/hostedtoolcache/Python"
           - python: "3.9"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
+            poetry_tool_cache: "/opt/hostedtoolcache/Python/"
           - python: "3.10"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
+            poetry_tool_cache: "/opt/hostedtoolcache/Python/"
           - python: "3.11"
             os: "ubuntu-latest"
             poetry_cache_path: "~/.cache/pypoetry"
+            poetry_tool_cache: "/opt/hostedtoolcache/Python/"
           - python: "3.8"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
           - python: "3.9"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
           - python: "3.10"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
           - python: "3.11"
             os: "macos-latest"
             poetry_cache_path: "~/Library/Caches/pypoetry"
+            poetry_tool_cache: "/Users/runner/hostedtoolcache/Python"
           - python: "3.8"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
           - python: "3.9"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
           - python: "3.10"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
           - python: "3.11"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry\'
+            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
+            poetry_tool_cache: 'C:\hostedtoolcache\windows\Python'
 
         # TODO: arch is not supported yet (arm64, i386, x86_64, ...)
     defaults:
@@ -70,7 +85,9 @@ jobs:
       - uses: actions/cache@v3
         name: poetry cache
         with:
-          path: ${{ matrix.poetry_cache_path }}
+          path: |
+            ${{ matrix.poetry_tool_cache }}
+            ${{ matrix.poetry_cache_path }}
           key: |
             ${{ runner.os }}-${{ matrix.python }}-poetry-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.os }}-${{ matrix.python }}-poetry-
