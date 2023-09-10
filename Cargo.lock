@@ -386,7 +386,7 @@ dependencies = [
 
 [[package]]
 name = "kitsuyui-rust-playground"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "hex",
  "openssl",
@@ -398,11 +398,11 @@ dependencies = [
 
 [[package]]
 name = "kitsuyui-rust-playground-lib"
-version = "0.1.6"
+version = "0.1.7"
 
 [[package]]
 name = "kitsuyui-rust-playground-wasm"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-test",
@@ -698,7 +698,7 @@ dependencies = [
 
 [[package]]
 name = "python"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "kitsuyui-rust-playground-lib",
  "pyo3",
