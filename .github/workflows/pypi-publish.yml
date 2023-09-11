@@ -147,8 +147,9 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: build_wheels
+          name: wheels-${{ env.VERSION }}
           path: target/wheels/
+          retention-days: 1
 
   publish:
     needs: build
@@ -156,8 +157,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: build_wheels
+          name: wheels-${{ env.VERSION }}
           path: target/wheels/
+
+      - name: Publish distribution to GitHub Releases
+        if: github.event_name == 'release' && !github.event.release.prerelease
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/wheels/*
 
       - name: Publish distribution to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
