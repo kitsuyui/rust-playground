@@ -7,77 +7,67 @@ on:
     # "released" events are emitted either when directly be released or be edited from pre-released.
     types: [prereleased, released]
 
+env:
+  # Use git tag when release, otherwise use commit hash.
+  VERSION: ${{ (github.event_name == 'release' && !github.event.release.prerelease) && github.ref_name || github.sha }}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}-py${{ matrix.python }}-${{ matrix.rust_target }}
+    env:
+      POETRY_CACHE_PATH: ${{ matrix.os == 'ubuntu-latest' && '/home/runner/.cache/pypoetry' || matrix.os == 'macos-latest' && '/Users/runner/Library/Caches/pypoetry' || matrix.os == 'windows-latest' && 'C:\\Users\\runneradmin\\AppData\\Local\\pypoetry' }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - python: "3.8"
             os: "ubuntu-latest"
-            poetry_cache_path: "~/.cache/pypoetry"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.9"
             os: "ubuntu-latest"
-            poetry_cache_path: "~/.cache/pypoetry"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.10"
             os: "ubuntu-latest"
-            poetry_cache_path: "~/.cache/pypoetry"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.11"
             os: "ubuntu-latest"
-            poetry_cache_path: "~/.cache/pypoetry"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.8"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "x86_64-apple-darwin"
           - python: "3.9"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "x86_64-apple-darwin"
           - python: "3.10"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "x86_64-apple-darwin"
           - python: "3.11"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "x86_64-apple-darwin"
           - python: "3.8"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "aarch64-apple-darwin"
           - python: "3.9"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "aarch64-apple-darwin"
           - python: "3.10"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "aarch64-apple-darwin"
           - python: "3.11"
             os: "macos-latest"
-            poetry_cache_path: "~/Library/Caches/pypoetry"
             rust_target: "aarch64-apple-darwin"
           - python: "3.8"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             rust_target: "x86_64-pc-windows-msvc"
           - python: "3.9"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             rust_target: "x86_64-pc-windows-msvc"
           - python: "3.10"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             rust_target: "x86_64-pc-windows-msvc"
           - python: "3.11"
             os: "windows-latest"
-            poetry_cache_path: 'C:\Users\runneradmin\AppData\Local\pypoetry'
             rust_target: "x86_64-pc-windows-msvc"
 
     defaults:
@@ -102,7 +92,7 @@ jobs:
       - uses: actions/cache@v3
         name: poetry cache
         with:
-          path: ${{ matrix.poetry_cache_path }}
+          path: ${{ env.POETRY_CACHE_PATH }}
           restore-keys: |
             poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
             poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
