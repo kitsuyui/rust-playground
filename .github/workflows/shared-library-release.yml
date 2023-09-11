@@ -1,0 +1,102 @@
+name: library release
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  release:
+    # "released" events are emitted either when directly be released or be edited from pre-released.
+    types: [prereleased, released]
+
+env:
+  # Use git tag when release, otherwise use commit hash.
+  VERSION: ${{ (github.event_name == 'release' && !github.event.release.prerelease) && github.ref_name || github.sha }}
+
+jobs:
+  build:
+    name: build ${{ matrix.arch }} on ${{ matrix.os }} with ${{ matrix.gcc }}
+    env:
+      NAME: kitsuyui-rust-playground # shared library name
+      ARCH: ${{ matrix.arch }}
+      OS: ${{ matrix.os }}
+      PACKAGE: ${{ matrix.package }}
+      GCC: ${{ matrix.gcc }}
+      CFLAGS: ${{ matrix.cflags }}
+      LIB: ${{
+        matrix.arch == 'x86_64-pc-windows-gnu' && 'kitsuyui_rust_playground_lib.dll' ||
+        matrix.os == 'macos-latest' && 'libkitsuyui_rust_playground_lib.dylib' ||
+        matrix.os == 'ubuntu-latest' && 'libkitsuyui_rust_playground_lib.so' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - arch: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+            package: gcc-aarch64-linux-gnu
+            gcc: aarch64-linux-gnu-gcc
+          - arch: armv7-unknown-linux-gnueabihf
+            os: ubuntu-latest
+            package: gcc-arm-linux-gnueabihf
+            gcc: arm-linux-gnueabihf-gcc
+          - arch: arm-unknown-linux-gnueabihf
+            os: ubuntu-latest
+            package: gcc-arm-linux-gnueabihf
+            gcc: arm-linux-gnueabihf-gcc
+          - arch: x86_64-pc-windows-gnu
+            os: ubuntu-latest
+            package: gcc-mingw-w64-x86-64
+          - arch: x86_64-apple-darwin
+            os: macos-latest
+          - arch: aarch64-apple-darwin
+            os: macos-latest
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.arch }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.os }}-${{ matrix.arch }}
+
+      - name: Install APT packages
+        if: matrix.os == 'ubuntu-latest' && matrix.package != ''
+        run: sudo apt-get update && sudo apt-get install -y $PACKAGE
+
+      - name: Build target
+        run: cargo build --release --verbose --target $ARCH
+
+      - name: Compress
+        run: |
+          mkdir -p ./artifacts
+          find ./target/
+          mv ./target/$ARCH/release/$LIB ./$LIB
+          tar -czf ./artifacts/lib-$NAME-$ARCH-$VERSION.tar.gz $LIB
+
+      - name: Archive artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: lib-${{ env.VERSION }}
+          path: ./artifacts
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: lib-${{ env.VERSION }}
+          path: ./artifacts
+
+      - name: List
+        run: find ./artifacts
+
+      - name: Release
+        if: github.event_name == 'release' && !github.event.release.prerelease
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./artifacts/*.tar.gz
