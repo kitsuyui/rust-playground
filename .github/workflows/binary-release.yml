@@ -7,6 +7,9 @@ on:
     # "released" events are emitted either when directly be released or be edited from pre-released.
     types: [prereleased, released]
 
+env:
+  VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || github.sha }}
+
 jobs:
   build:
     name: build ${{ matrix.arch }} on ${{ matrix.os }} with ${{ matrix.gcc }}
@@ -18,7 +21,6 @@ jobs:
       GCC: ${{ matrix.gcc }}
       CFLAGS: ${{ matrix.cflags }}
       EXECUTABLE: kitsuyui-rust-playground${{ matrix.arch == 'x86_64-pc-windows-gnu' && '.exe' || '' }}
-      VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || github.sha }}
     strategy:
       fail-fast: false
       matrix:
@@ -90,9 +92,8 @@ jobs:
         name: Archive artifact
         uses: actions/upload-artifact@v3
         with:
-          name: result
-          path: |
-            ./artifacts
+          name: binary-${{ env.VERSION }}
+          path: ./artifacts
 
   deploy:
     if: startsWith(github.ref, 'refs/tags/')
@@ -102,7 +103,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          name: result
+          name: binary-${{ env.VERSION }}
           path: ./artifacts
       - name: List
         run: find ./artifacts
