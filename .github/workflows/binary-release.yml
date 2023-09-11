@@ -73,7 +73,6 @@ jobs:
       - name: Build target
         run: |
           if [[ $OS =~ ^.*ubuntu.*$ ]]; then
-            rustup target add $ARCH
             sudo apt-get update && sudo apt-get install -y $PACKAGE
             TARGET="$ARCH" CFLAGS="$CFLAGS" CC=$GCC cargo build --release --verbose --target $ARCH
           elif [[ $OS =~ ^.*macos.*$ ]]; then
