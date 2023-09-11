@@ -16,7 +16,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}-py${{ matrix.python }}-${{ matrix.rust_target }}
     env:
-      POETRY_CACHE_PATH: ${{ matrix.os == 'ubuntu-latest' && '/home/runner/.cache/pypoetry' || matrix.os == 'macos-latest' && '/Users/runner/Library/Caches/pypoetry' || matrix.os == 'windows-latest' && 'C:\\Users\\runneradmin\\AppData\\Local\\pypoetry' }}
+      POETRY_CACHE_PATH: ${{
+        matrix.os == 'ubuntu-latest' && '/home/runner/.cache/pypoetry' ||
+        matrix.os == 'macos-latest' && '/Users/runner/Library/Caches/pypoetry' ||
+        matrix.os == 'windows-latest' && 'C:\\Users\\runneradmin\\AppData\\Local\\pypoetry' }}
     strategy:
       fail-fast: false
       matrix:
