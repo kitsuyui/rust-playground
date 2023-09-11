@@ -86,7 +86,7 @@ jobs:
         run: |
           mkdir -p ./artifacts
           mv ./target/$ARCH/release/$EXECUTABLE ./$EXECUTABLE
-          tar -czf ./artifacts/$BASE_NAME-$ARCH-$VERSION.tar.gz $EXECUTABLE
+          tar -czf ./artifacts/$NAME-$ARCH-$VERSION.tar.gz $EXECUTABLE
 
       - name: Archive artifact
         uses: actions/upload-artifact@v3
