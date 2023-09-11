@@ -11,7 +11,7 @@ jobs:
   build:
     name: build ${{ matrix.arch }} on ${{ matrix.os }} with ${{ matrix.gcc }}
     env:
-      NAME: kitsuyui-rust-playground  # executable binary name
+      NAME: kitsuyui-rust-playground # executable binary name
       ARCH: ${{ matrix.arch }}
       OS: ${{ matrix.os }}
       PACKAGE: ${{ matrix.package }}
@@ -70,14 +70,13 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.os }}-${{ matrix.arch }}
+
+      - name: Install APT packages
+        if: matrix.os == 'ubuntu-latest' && matrix.package != ''
+        run: sudo apt-get update && sudo apt-get install -y $PACKAGE
+
       - name: Build target
-        run: |
-          if [[ $OS =~ ^.*ubuntu.*$ ]]; then
-            sudo apt-get update && sudo apt-get install -y $PACKAGE
-            TARGET="$ARCH" CFLAGS="$CFLAGS" CC=$GCC cargo build --release --verbose --target $ARCH
-          elif [[ $OS =~ ^.*macos.*$ ]]; then
-            cargo build --release --verbose --target $ARCH
-          fi
+        run: cargo build --release --verbose --target $ARCH
 
       - name: Compress
         run: |
