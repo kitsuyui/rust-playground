@@ -22,17 +22,26 @@ I'm going to try to speed up CI and publish binaries on crates.io.
   - [x] bin crate
   - [x] lib crate
 - [x] Build for multiple architectures
-  - [x] aarch64-apple-darwin
-  - [x] aarch64-unknown-linux-gnu
-  - [x] aarch64-unknown-linux-musl
-  - [x] arm-unknown-linux-gnueabihf
-  - [x] arm-unknown-linux-musleabihf
-  - [x] armv7-unknown-linux-gnueabihf
-  - [x] armv7-unknown-linux-musleabihf
-  - [x] x86_64-apple-darwin
-  - [x] x86_64-pc-windows-gnu
-  - [x] x86_64-unknown-linux-gnu
-  - [x] x86_64-unknown-linux-musl
+  - executable binaries
+    - [x] aarch64-apple-darwin
+    - [x] aarch64-unknown-linux-gnu
+    - [x] aarch64-unknown-linux-musl
+    - [x] arm-unknown-linux-gnueabihf
+    - [x] arm-unknown-linux-musleabihf
+    - [x] armv7-unknown-linux-gnueabihf
+    - [x] armv7-unknown-linux-musleabihf
+    - [x] x86_64-apple-darwin
+    - [x] x86_64-pc-windows-gnu
+    - [x] x86_64-unknown-linux-gnu
+    - [x] x86_64-unknown-linux-musl
+  - shared libraries
+    - [x] aarch64-apple-darwin
+    - [x] aarch64-unknown-linux-gnu
+    - [x] arm-unknown-linux-gnueabihf
+    - [x] armv7-unknown-linux-gnueabihf
+    - [x] x86_64-apple-darwin
+    - [x] x86_64-pc-windows-gnu
+    - [x] x86_64-unknown-linux-gnu
 - [x] Publish lib crate to crates.io
 - [x] WASM
 - [x] FFI
