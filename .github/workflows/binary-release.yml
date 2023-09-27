@@ -53,11 +53,6 @@ jobs:
             os: ubuntu-latest
             package: gcc-arm-linux-gnueabihf
             gcc: arm-linux-gnueabihf-gcc
-          - arch: arm-unknown-linux-musleabihf
-            os: ubuntu-latest
-            package: gcc-arm-linux-gnueabihf musl-tools
-            cflags: -U_FORTIFY_SOURCE
-            gcc: arm-linux-gnueabihf-gcc
           - arch: x86_64-pc-windows-gnu
             os: ubuntu-latest
             package: gcc-mingw-w64-x86-64
