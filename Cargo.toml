@@ -8,7 +8,7 @@ repository = "https://github.com/kitsuyui/rust-playground"
 [workspace.dependencies]
 openssl-probe = "0.1.5"
 reqwest = { version = "0.11.22", features = ["blocking"] }
-ring = "0.17.3"
+ring = "0.17.4"
 hex = "0.4.3"
 tokio = "1.33.0"
 pyo3 = { version = "0.20.0", features = ["extension-module"] }
