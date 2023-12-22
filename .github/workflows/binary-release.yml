@@ -85,9 +85,9 @@ jobs:
           tar -czf ./artifacts/$NAME-$ARCH-$VERSION.tar.gz $EXECUTABLE
 
       - name: Archive artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: binary-${{ env.VERSION }}
+          name: binary-${{ env.VERSION }}-${{ env.ARCH }}-${{ env.OS }}
           path: ./artifacts
           retention-days: 1
 
@@ -96,9 +96,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: binary-${{ env.VERSION }}
+          pattern: binary-${{ env.VERSION }}-*
+          merge-multiple: true
           path: ./artifacts
 
       - name: List
