@@ -148,7 +148,7 @@ jobs:
           python -c 'from kitsuyui_rust_playground import my_calc; assert my_calc(1, 2, 3) == "9"; print("OK")'
           deactivate
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ env.VERSION }}
           path: target/wheels/
