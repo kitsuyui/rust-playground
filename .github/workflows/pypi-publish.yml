@@ -148,9 +148,9 @@ jobs:
           python -c 'from kitsuyui_rust_playground import my_calc; assert my_calc(1, 2, 3) == "9"; print("OK")'
           deactivate
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ env.VERSION }}
+          name: wheels-${{ env.VERSION }}-${{ matrix.os }}-${{ matrix.python }}-${{ matrix.rust_target }}
           path: target/wheels/
           retention-days: 1
 
@@ -158,9 +158,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: wheels-${{ env.VERSION }}
+          pattern: wheels-${{ env.VERSION }}-*
           path: target/wheels/
 
       - name: Publish distribution to GitHub Releases
