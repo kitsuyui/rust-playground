@@ -109,6 +109,12 @@ jobs:
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
 
+      - if: matrix.os != 'windows-latest'
+        # I don't know how to set proper python version on windows without full path.
+        # https://github.com/python-poetry/poetry/issues/2117
+        run: |
+          poetry env use python${{ matrix.python }}
+
       - uses: actions/cache@v4
         name: python package cache
         with:
