@@ -92,6 +92,12 @@ jobs:
         with:
           prefix-key: ${{ matrix.os }}-${{ matrix.rust_target }}-
 
+      - uses: abatilo/actions-poetry@v3
+      - name: Setup a virtual environment
+        run: |
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+
       - uses: actions/cache@v4
         name: poetry cache
         with:
@@ -101,13 +107,6 @@ jobs:
             poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
             poetry-${{ runner.os }}-${{ matrix.python }}-
           key: poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
-
-      - uses: abatilo/actions-poetry@v3
-
-      - name: Setup a virtual environment
-        run: |
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
 
       - uses: actions/cache@v4
         name: python package cache
@@ -139,13 +138,12 @@ jobs:
       - name: test
         if: matrix.os != 'windows-latest'
         run: |
-          rm ../target/wheels/*
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install .
+          pip install ../target/wheels/*.whl
           pip install pytest
           pytest tests
-          python -c 'from kitsuyui_rust_playground import my_calc; assert my_calc(1, 2, 3) == "9"; print("OK")'
+          python3 -c 'from kitsuyui_rust_playground import my_calc; assert my_calc(1, 2, 3) == "9"; print("OK")'
           deactivate
 
       - uses: actions/upload-artifact@v4
