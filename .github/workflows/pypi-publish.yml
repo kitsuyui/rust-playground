@@ -102,12 +102,18 @@ jobs:
             poetry-${{ runner.os }}-${{ matrix.python }}-
           key: poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
 
-      - uses: abatilo/actions-poetry@v2
+      - uses: abatilo/actions-poetry@v3
 
       - name: Setup a virtual environment
         run: |
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
+
+      - if: matrix.os != 'windows-latest'
+        # I don't know how to set proper python version on windows without full path.
+        # https://github.com/python-poetry/poetry/issues/2117
+        run: |
+          poetry env use python${{ matrix.python }}
 
       - uses: actions/cache@v4
         name: python package cache
