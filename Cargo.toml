@@ -7,7 +7,7 @@ repository = "https://github.com/kitsuyui/rust-playground"
 
 [workspace.dependencies]
 openssl-probe = "0.1.5"
-reqwest = { version = "0.12.3", features = ["blocking"] }
+reqwest = { version = "0.12.4", features = ["blocking"] }
 ring = "0.17.8"
 hex = "0.4.3"
 tokio = "1.37.0"
