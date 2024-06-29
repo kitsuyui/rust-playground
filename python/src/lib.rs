@@ -8,7 +8,7 @@ fn my_calc(a: i64, b: i64, c: i64) -> PyResult<String> {
 
 #[pymodule]
 #[pyo3(name = "kitsuyui_rust_playground")]
-fn python_kitsuyui_rust_playground(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn python_kitsuyui_rust_playground(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(my_calc, m)?)?;
     Ok(())
 }
