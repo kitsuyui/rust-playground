@@ -452,6 +452,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "kitsuyui-rust-playground-checkpoint"
+version = "0.1.8"
+
+[[package]]
 name = "kitsuyui-rust-playground-lib"
 version = "0.1.8"
 

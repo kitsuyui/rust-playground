@@ -26,9 +26,11 @@ members = [
     "c2",
     "python",
     "wasm",
+    "checkpoint",
 ]
 
 default-members = [
     "c1",
     "c2",
+    "checkpoint",
 ]
