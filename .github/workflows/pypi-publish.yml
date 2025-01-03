@@ -114,7 +114,7 @@ jobs:
             poetry-${{ runner.os }}-${{ matrix.python }}-
           key: poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
 
-      - uses: abatilo/actions-poetry@v3
+      - uses: abatilo/actions-poetry@v4
 
       - name: Setup a virtual environment
         run: |
