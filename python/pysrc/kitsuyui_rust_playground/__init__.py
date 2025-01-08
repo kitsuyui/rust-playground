@@ -1,9 +1,10 @@
-from .kitsuyui_rust_playground import *  # type: ignore
+import kitsuyui_rust_playground._native as _native  # type: ignore  # noqa: F403
+from kitsuyui_rust_playground._native import *  # noqa: F403
 
 
-if hasattr(kitsuyui_rust_playground, "__doc__"):
-    __doc__ = kitsuyui_rust_playground.__doc__
+if hasattr(_native, "__doc__"):
+    __doc__ = _native.__doc__
 
 
-if hasattr(kitsuyui_rust_playground, "__all__"):
-    __all__ = kitsuyui_rust_playground.__all__
+if hasattr(_native, "__all__"):
+    __all__ = _native.__all__

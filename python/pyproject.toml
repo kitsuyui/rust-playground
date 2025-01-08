@@ -4,13 +4,14 @@ version = "0.1.5"
 description = ""
 authors = ["kitsuyui <kitsuyui@kitsuyui.com>"]
 readme = "README.md"
-packages = []
+packages = [{ include = "./pysrc" }]
 
-[project]
-name = "kitsuyui_rust_playground"
+[tool.maturin]
+python-source = "pysrc"
+module-name = "kitsuyui_rust_playground._native"
 
 [build-system]
-requires = ["maturin"]
+requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
 
 [tool.poetry.dependencies]
@@ -21,3 +22,32 @@ maturin = "*"
 pytest = "*"
 pytest-cov = "*"
 atomicwrites = "*"
+mypy = "*"
+ruff = "*"
+poethepoet = "*"
+
+[tool.poe.tasks]
+
+format = "ruff format pysrc/ tests/"
+check-all = [
+    {cmd = "ruff check", cwd = "pysrc"},
+    {cmd = "ruff check", cwd = "tests"},
+    {cmd = "mypy pysrc"}, 
+]
+dev-build = [
+    {cmd = "maturin develop"},
+]
+build = [
+    {cmd = "maturin build --release"},
+]
+test = [
+    "dev-build",
+    {cmd = "pytest tests/ --cov=pysrc/ --cov-report=term-missing"},
+]
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = false
+
+[tool.ruff]
+line-length = 79
