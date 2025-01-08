@@ -2,4 +2,5 @@ gibo dump macOS
 gibo dump Linux
 gibo dump Windows
 gibo dump Rust
+gibo dump Python
 echo '!Cargo.lock'
