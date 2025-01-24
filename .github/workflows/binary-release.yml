@@ -36,7 +36,7 @@ jobs:
             package: gcc-aarch64-linux-gnu
             gcc: aarch64-linux-gnu-gcc
           - arch: aarch64-unknown-linux-musl
-            os: ubuntu-latest
+            os: ubuntu-22.04
             package: gcc-aarch64-linux-gnu musl-tools
             gcc: aarch64-linux-gnu-gcc
             cflags: -U_FORTIFY_SOURCE
@@ -45,7 +45,7 @@ jobs:
             package: gcc-arm-linux-gnueabihf
             gcc: arm-linux-gnueabihf-gcc
           - arch: armv7-unknown-linux-musleabihf
-            os: ubuntu-latest
+            os: ubuntu-22.04
             package: gcc-arm-linux-gnueabihf musl-tools
             gcc: arm-linux-gnueabihf-gcc
             cflags: -U_FORTIFY_SOURCE
@@ -72,7 +72,7 @@ jobs:
           key: ${{ matrix.os }}-${{ matrix.arch }}
 
       - name: Install APT packages
-        if: matrix.os == 'ubuntu-latest' && matrix.package != ''
+        if: (matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-22.04') && matrix.package != ''
         run: sudo apt-get update && sudo apt-get install -y $PACKAGE
 
       - name: Build target
