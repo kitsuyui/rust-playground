@@ -166,7 +166,7 @@ jobs:
           python -c 'from kitsuyui_rust_playground import my_calc; assert my_calc(1, 2, 3) == "9"; print("OK")'
           deactivate
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: wheels-${{ env.VERSION }}-${{ matrix.os }}-${{ matrix.python }}-${{ matrix.rust_target }}
           path: target/wheels/
@@ -176,7 +176,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           pattern: wheels-${{ env.VERSION }}-*
           path: target/wheels/
