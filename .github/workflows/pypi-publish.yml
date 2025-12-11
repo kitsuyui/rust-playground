@@ -104,7 +104,7 @@ jobs:
         with:
           prefix-key: ${{ matrix.os }}-${{ matrix.rust_target }}-
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: poetry cache
         with:
           path: ${{ env.POETRY_CACHE_PATH }}
@@ -127,7 +127,7 @@ jobs:
         run: |
           poetry env use python${{ matrix.python }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: python package cache
         with:
           path: ./.venv
