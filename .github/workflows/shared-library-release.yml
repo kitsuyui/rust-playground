@@ -76,7 +76,7 @@ jobs:
           tar -czf ./artifacts/lib-$NAME-$ARCH-$VERSION.tar.gz $LIB
 
       - name: Archive artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: lib-${{ env.VERSION }}-${{ env.OS }}-${{ env.ARCH }}
           path: ./artifacts
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: lib-${{ env.VERSION }}-*
           merge-multiple: true
