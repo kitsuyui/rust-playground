@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-03-24T14:36:10.131Z",
+  "repository": "kitsuyui/rust-playground",
+  "default_branch": "main",
+  "publish_branch": "gh-counter-assets",
+  "event_name": "push",
+  "base_reference": null,
+  "head_reference": "7016286685c75e327a542badf4a0ea1ce9701440",
+  "bootstrap_message": null,
+  "counters": [
+    {
+      "id": "type-ignore",
+      "label": "type: ignore",
+      "current": 1,
+      "base": null,
+      "delta": null,
+      "commentable": true,
+      "touched_files": [],
+      "violations": [],
+      "badge_path": ".gh-counter/badges/type-ignore.svg",
+      "counter_path": ".gh-counter/counters/type-ignore.json"
+    }
+  ]
+}
