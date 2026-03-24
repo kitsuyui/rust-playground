@@ -1,0 +1,16 @@
+version: 1
+publish:
+  enabled: true
+  branch: gh-counter-assets
+comment:
+  key: type-ignore
+counters:
+  - id: type-ignore
+    label: "type: ignore"
+    badge:
+      label: "type: ignore"
+    matchers:
+      - files:
+          - python/**/*.py
+        type: contains
+        pattern: "# type: ignore"
