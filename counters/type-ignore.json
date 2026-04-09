@@ -6,7 +6,7 @@
     {
       "path": "python/pysrc/kitsuyui_rust_playground/__init__.py",
       "line": 1,
-      "text": "import kitsuyui_rust_playground._native as _native  # type: ignore  # noqa: F403"
+      "text": "import kitsuyui_rust_playground._native as _native  # type: ignore"
     }
   ]
 }
