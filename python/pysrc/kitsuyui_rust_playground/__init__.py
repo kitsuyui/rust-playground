@@ -1,6 +1,5 @@
-import kitsuyui_rust_playground._native as _native  # type: ignore  # noqa: F403
+import kitsuyui_rust_playground._native as _native  # type: ignore
 from kitsuyui_rust_playground._native import *  # noqa: F403
-
 
 if hasattr(_native, "__doc__"):
     __doc__ = _native.__doc__
