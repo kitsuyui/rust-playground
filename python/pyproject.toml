@@ -1,10 +1,14 @@
-[tool.poetry]
+[project]
 name = "kitsuyui_rust_playground"
 version = "0.1.5"
-description = ""
-authors = ["kitsuyui <kitsuyui@kitsuyui.com>"]
 readme = "README.md"
-packages = [{ include = "./pysrc" }]
+requires-python = ">=3.10"
+authors = [
+    { name = "kitsuyui", email = "kitsuyui@kitsuyui.com" },
+]
+classifiers = [
+    "Private :: Do Not Upload",
+]
 
 [tool.maturin]
 python-source = "pysrc"
@@ -14,17 +18,22 @@ module-name = "kitsuyui_rust_playground._native"
 requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
 
-[tool.poetry.dependencies]
-python = "^3.10"
+[dependency-groups]
+dev = [
+    "maturin",
+    "pytest",
+    "pytest-cov",
+    "atomicwrites",
+    "mypy",
+    "ruff",
+    "poethepoet",
+]
 
-[tool.poetry.group.dev.dependencies]
-maturin = "*"
-pytest = "*"
-pytest-cov = "*"
-atomicwrites = "*"
-mypy = "*"
-ruff = "*"
-poethepoet = "*"
+[tool.uv]
+exclude-newer = "2 days"
+
+[tool.poe]
+executor = { type = "uv", group = "dev" }
 
 [tool.poe.tasks]
 

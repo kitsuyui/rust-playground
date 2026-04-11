@@ -15,6 +15,22 @@ def my_calc(a: int, b: int, c: int) -> str:
     return str((a + b) * c)
 ```
 
+## Development
+
+Install development dependencies with [uv](https://docs.astral.sh/uv/).
+
+```sh
+cd python
+uv sync --group dev
+```
+
+Run checks and tests with:
+
+```sh
+uv run poe check-all
+uv run poe test
+```
+
 # LICENSE
 
 The 3-Clause BSD License. See also LICENSE file.
