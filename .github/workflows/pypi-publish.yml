@@ -15,11 +15,6 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}-py${{ matrix.python }}-${{ matrix.rust_target }}
-    env:
-      POETRY_CACHE_PATH: ${{
-        matrix.os == 'ubuntu-latest' && '/home/runner/.cache/pypoetry' ||
-        matrix.os == 'macos-latest' && '/Users/runner/Library/Caches/pypoetry' ||
-        matrix.os == 'windows-latest' && 'C:\\Users\\runneradmin\\AppData\\Local\\pypoetry' }}
     strategy:
       fail-fast: false
       matrix:
@@ -97,6 +92,11 @@ jobs:
         with:
           python-version: "${{ matrix.python }}"
 
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.rust_target }}
@@ -104,55 +104,24 @@ jobs:
         with:
           prefix-key: ${{ matrix.os }}-${{ matrix.rust_target }}-
 
-      - uses: actions/cache@v5
-        name: poetry cache
-        with:
-          path: ${{ env.POETRY_CACHE_PATH }}
-          restore-keys: |
-            poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
-            poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
-            poetry-${{ runner.os }}-${{ matrix.python }}-
-          key: poetry-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
-
-      - uses: abatilo/actions-poetry@v4
-
-      - name: Setup a virtual environment
-        run: |
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
-
-      - if: matrix.os != 'windows-latest'
-        # I don't know how to set proper python version on windows without full path.
-        # https://github.com/python-poetry/poetry/issues/2117
-        run: |
-          poetry env use python${{ matrix.python }}
-
-      - uses: actions/cache@v5
-        name: python package cache
-        with:
-          path: ./.venv
-          restore-keys: |
-            python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
-            python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-
-            python-venv-${{ runner.os }}-${{ matrix.python }}-
-          key: python-venv-${{ runner.os }}-${{ matrix.python }}-${{ matrix.rust_target }}-${{ hashFiles('**/poetry.lock') }}
-
       - name: Install python dependencies
-        run: poetry install
+        run: |
+          uv python pin ${{ matrix.python }}
+          uv sync --group dev
 
       - name: Check Python version
         if: matrix.os != 'windows-latest'
         run: |
-          actual_version=$(poetry run python --version)
+          actual_version=$(uv run python --version)
           expected_version="Python ${{ matrix.python }}"
-          if [ "$actual_version" == *"$expected_version"* ]; then
+          if [ "$actual_version" != *"$expected_version"* ]; then
             echo "Expected $expected_version, but got $actual_version"
             exit 1
           fi
 
       - name: packaging
         run: |
-          poetry run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
+          uv run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
 
       - name: test
         if: matrix.os != 'windows-latest'
