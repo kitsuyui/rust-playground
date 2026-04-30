@@ -20,7 +20,6 @@ jobs:
       OS: ${{ matrix.os }}
       PACKAGE: ${{ matrix.package }}
       GCC: ${{ matrix.gcc }}
-      CFLAGS: ${{ matrix.cflags }}
       LIB: ${{
         matrix.arch == 'x86_64-pc-windows-gnu' && 'kitsuyui_rust_playground_lib.dll' ||
         matrix.os == 'macos-latest' && 'libkitsuyui_rust_playground_lib.dylib' ||
@@ -63,17 +62,17 @@ jobs:
 
       - name: Install APT packages
         if: matrix.os == 'ubuntu-latest' && matrix.package != ''
-        run: sudo apt-get update && sudo apt-get install -y $PACKAGE
+        run: sudo apt-get update && sudo apt-get install -y "$PACKAGE"
 
       - name: Build target
-        run: cargo build --release --verbose --target $ARCH
+        run: cargo build --release --verbose --target "$ARCH"
 
       - name: Compress
         run: |
           mkdir -p ./artifacts
           find ./target/
-          mv ./target/$ARCH/release/$LIB ./$LIB
-          tar -czf ./artifacts/lib-$NAME-$ARCH-$VERSION.tar.gz $LIB
+          mv "./target/$ARCH/release/$LIB" "./$LIB"
+          tar -czf "./artifacts/lib-$NAME-$ARCH-$VERSION.tar.gz" "$LIB"
 
       - name: Archive artifact
         uses: actions/upload-artifact@v6

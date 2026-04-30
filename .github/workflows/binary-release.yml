@@ -20,7 +20,6 @@ jobs:
       OS: ${{ matrix.os }}
       PACKAGE: ${{ matrix.package }}
       GCC: ${{ matrix.gcc }}
-      CFLAGS: ${{ matrix.cflags }}
       EXECUTABLE: kitsuyui-rust-playground${{ matrix.arch == 'x86_64-pc-windows-gnu' && '.exe' || '' }}
     strategy:
       fail-fast: false
@@ -60,16 +59,16 @@ jobs:
 
       - name: Install APT packages
         if: (matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-22.04') && matrix.package != ''
-        run: sudo apt-get update && sudo apt-get install -y $PACKAGE
+        run: sudo apt-get update && sudo apt-get install -y "$PACKAGE"
 
       - name: Build target
-        run: cargo build --release --verbose --target $ARCH
+        run: cargo build --release --verbose --target "$ARCH"
 
       - name: Compress
         run: |
           mkdir -p ./artifacts
-          mv ./target/$ARCH/release/$EXECUTABLE ./$EXECUTABLE
-          tar -czf ./artifacts/$NAME-$ARCH-$VERSION.tar.gz $EXECUTABLE
+          mv "./target/$ARCH/release/$EXECUTABLE" "./$EXECUTABLE"
+          tar -czf "./artifacts/$NAME-$ARCH-$VERSION.tar.gz" "$EXECUTABLE"
 
       - name: Archive artifact
         uses: actions/upload-artifact@v6
