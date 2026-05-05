@@ -1,12 +1,15 @@
 {
-  "generated_at": "2026-05-05T01:46:21.920Z",
+  "generated_at": "2026-05-05T03:10:03.444Z",
   "repository": "kitsuyui/rust-playground",
   "default_branch": "main",
   "publish_branch": "gh-counter-assets",
   "event_name": "push",
-  "base_reference": "cbb1b3bf78863b84f783202753facf5e217a4d9c",
-  "head_reference": "f78b272f04eacd2d463fe8d195263f1f64348eb3",
+  "base_label": "main",
+  "base_reference": "f78b272f04eacd2d463fe8d195263f1f64348eb3",
+  "head_label": "main",
+  "head_reference": "29c4738acfd51ed83aecf71d03a022087c6338c9",
   "bootstrap_message": null,
+  "base_only_paths": [],
   "counters": [
     {
       "id": "type-ignore",
@@ -14,8 +17,20 @@
       "current": 1,
       "base": 1,
       "delta": 0,
+      "dashboard_current": 1,
+      "dashboard_base": 1,
+      "dashboard_delta": 0,
       "commentable": true,
       "touched_files": [],
+      "file_deltas": [
+        {
+          "path": "python/pysrc/kitsuyui_rust_playground/__init__.py",
+          "current": 1,
+          "base": 0,
+          "delta": 1
+        }
+      ],
+      "patch_file_deltas": [],
       "violations": [],
       "badge_path": ".gh-counter/badges/type-ignore.svg",
       "counter_path": ".gh-counter/counters/type-ignore.json"
