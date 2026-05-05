@@ -9,15 +9,7 @@ on:
       - main
 jobs:
   actionlint:
-    name: Actionlint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
-        with:
-          go-version: stable
-      - run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/*.yml
-
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/actionlint.yml@main
   check:
     name: Check
     runs-on: ubuntu-latest
