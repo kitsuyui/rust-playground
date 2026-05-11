@@ -74,7 +74,7 @@ jobs:
           tar -czf "./artifacts/$NAME-$ARCH-$VERSION.tar.gz" "$EXECUTABLE"
 
       - name: Archive artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: binary-${{ env.VERSION }}-${{ env.ARCH }}-${{ env.OS }}
           path: ./artifacts
@@ -87,7 +87,7 @@ jobs:
       contents: write
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           pattern: binary-${{ env.VERSION }}-*
           merge-multiple: true
@@ -98,6 +98,6 @@ jobs:
 
       - name: Release
         if: github.event_name == 'release' && !github.event.release.prerelease
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           files: ./artifacts/*.tar.gz
