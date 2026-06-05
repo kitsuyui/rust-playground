@@ -1,8 +1,8 @@
 mod id;
 use crate::id::Id;
 
-pub trait SnapshotRecord<CheckpointID: Id> {
-    fn id(&self) -> &CheckpointID;
+pub trait SnapshotRecord<SnapshotID: Id> {
+    fn id(&self) -> &SnapshotID;
 }
 
 pub trait CheckpointRecord<SnapshotID: Id, CheckpointID: Id> {
