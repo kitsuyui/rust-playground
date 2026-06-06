@@ -5,8 +5,8 @@ use crate::id::Id;
 ///
 /// Implementors must ensure that `id()` returns a stable, unique identifier
 /// within the snapshot collection.
-pub trait SnapshotRecord<CheckpointID: Id> {
-    fn id(&self) -> &CheckpointID;
+pub trait SnapshotRecord<SnapshotID: Id> {
+    fn id(&self) -> &SnapshotID;
 }
 
 /// A checkpoint represents a named point in a snapshot history graph.
