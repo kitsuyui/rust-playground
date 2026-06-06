@@ -162,7 +162,7 @@ wheels = [
 
 [[package]]
 name = "kitsuyui-rust-playground"
-version = "0.1.5"
+version = "0.1.8"
 source = { editable = "." }
 
 [package.dev-dependencies]

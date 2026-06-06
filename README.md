@@ -5,7 +5,7 @@
 [![crates.io-LICENSE](https://img.shields.io/crates/l/kitsuyui-rust-playground)](https://github.com/kitsuyui/rust-playground#license)
 ![Coverage](https://raw.githubusercontent.com/kitsuyui/octocov-central/main/badges/kitsuyui/rust-playground/coverage.svg)
 [![type: ignore](https://raw.githubusercontent.com/kitsuyui/rust-playground/gh-counter-assets/badges/type-ignore.svg)](https://github.com/kitsuyui/rust-playground/search?q=%22type%3A+ignore%22+path%3Apython&type=code)
-[![docs.rs](https://img.shields.io/docsrs/kitsuyui-rust-playground-lib)](https://docs.rs/kitsuyui-rust-playground-lib/0.1.5/kitsuyui_rust_playground_lib/)
+[![docs.rs](https://img.shields.io/docsrs/kitsuyui-rust-playground-lib)](https://docs.rs/kitsuyui-rust-playground-lib/latest/kitsuyui_rust_playground_lib/)
 
 ## en: What is this?
 
