@@ -45,16 +45,7 @@ async fn tokio_example() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn request_to_example_com() {
-    let client = match reqwest::blocking::Client::builder()
-        .timeout(std::time::Duration::from_secs(30))
-        .build()
-    {
-        Ok(c) => c,
-        Err(err) => {
-            println!("Error: {err}");
-            return;
-        }
-    };
+    let client = reqwest::blocking::Client::new();
     match client.get("https://example.com").send() {
         Ok(res) => {
             info!(status = %res.status(), "received response");
