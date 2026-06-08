@@ -6,6 +6,7 @@ use crate::id::Id;
 /// Implementors must ensure that `id()` returns a stable, unique identifier
 /// within the snapshot collection.
 pub trait SnapshotRecord<SnapshotID: Id> {
+    /// Returns a reference to this record's snapshot ID.
     fn id(&self) -> &SnapshotID;
 }
 
@@ -29,8 +30,11 @@ pub trait SnapshotRecord<SnapshotID: Id> {
 /// - **Valid snapshot**: `snapshot_id()` must correspond to an existing
 ///   `SnapshotRecord` in the associated snapshot collection.
 pub trait CheckpointRecord<SnapshotID: Id, CheckpointID: Id> {
+    /// Returns a reference to this checkpoint's unique ID.
     fn id(&self) -> &CheckpointID;
+    /// Returns references to all parent checkpoint IDs.
     fn parent_ids(&self) -> Vec<&CheckpointID>;
+    /// Returns a reference to the associated snapshot ID.
     fn snapshot_id(&self) -> &SnapshotID;
 
     /// Returns `true` if this checkpoint's own ID appears in `parent_ids()`.
