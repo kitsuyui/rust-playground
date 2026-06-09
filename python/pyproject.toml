@@ -1,6 +1,6 @@
 [project]
 name = "kitsuyui_rust_playground"
-version = "0.1.5"
+version = "0.1.8"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
