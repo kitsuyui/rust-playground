@@ -1,7 +1,8 @@
 use std::hash::Hash;
 
-// Id is a type that represents a unique identifier for a snapshot or checkpoint.
-// It must implement Eq, Hash, and Ord.
+/// A unique identifier for snapshots and checkpoints.
+///
+/// Implementors must be `Sized`, equatable, hashable, copyable, and orderable.
 pub trait Id: Sized + PartialEq + Eq + Hash + Copy + Clone + PartialOrd + Ord {}
 
 #[cfg(test)]
