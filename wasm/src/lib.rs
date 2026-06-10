@@ -1,19 +1,16 @@
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
-extern "C" {
-    pub fn alert(s: &str);
-}
-
-/// Displays a greeting alert for `name`.
+/// Returns a greeting string for `name`.
 ///
 /// `name` is sanitized by stripping Unicode bidirectional override characters
 /// (`U+202A`–`U+202E`, `U+2066`–`U+2069`) before display to prevent visual
-/// spoofing in the alert dialog.
+/// spoofing. The function behavior is fully expressed by its return type;
+/// callers that want to display the greeting in a dialog can call `alert()`
+/// themselves explicitly.
 #[wasm_bindgen]
-pub fn greet(name: &str) {
+pub fn greet(name: &str) -> String {
     let safe_name = strip_bidi(name);
-    alert(&format!("Hello, {}!", safe_name));
+    format!("Hello, {}!", safe_name)
 }
 
 fn strip_bidi(s: &str) -> String {
