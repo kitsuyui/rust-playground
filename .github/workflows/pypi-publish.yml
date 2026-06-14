@@ -139,7 +139,7 @@ jobs:
           pip install .
           pip install pytest
           pytest tests
-          python -c 'from kitsuyui_rust_playground import my_calc; assert my_calc(1, 2, 3) == "9"; print("OK")'
+          python -c 'from kitsuyui_rust_playground import multiply_sum; assert multiply_sum(1, 2, 3) == "9"; print("OK")'
           deactivate
 
       - uses: actions/upload-artifact@v6

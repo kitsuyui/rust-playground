@@ -3,16 +3,16 @@
 This repo is intended to show how to build rust-python binding packages.
 
 ```python
-from kitsuyui_rust_playground import my_calc
-my_calc(1, 2, 3)  # => '9'
+from kitsuyui_rust_playground import multiply_sum
+multiply_sum(1, 2, 3)  # => '9'
 ```
 
-`my_calc` is implemented by Rust (with PyO3). 
+`multiply_sum` is implemented by Rust (with PyO3). 
 However it works as same as following python code:
 
 ```python
-def my_calc(a: int, b: int, c: int) -> str:
-    return str((a + b) * c)
+def multiply_sum(x: int, y: int, factor: int) -> str:
+    return str((x + y) * factor)
 ```
 
 ## Development
