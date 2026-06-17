@@ -98,16 +98,18 @@ fn is_sensitive_header(name: &HeaderName) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::show_openssl_version;
 
     #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-
-    #[test]
-    fn openssl_version() {
-        show_openssl_version();
+    fn openssl_version_is_non_empty() {
+        let version = openssl::version::version();
+        assert!(
+            !version.is_empty(),
+            "OpenSSL version string must not be empty"
+        );
+        assert!(
+            version.starts_with("OpenSSL"),
+            "expected version to start with 'OpenSSL', got: {version}"
+        );
     }
 
     #[test]
