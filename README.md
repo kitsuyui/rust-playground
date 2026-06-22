@@ -46,6 +46,22 @@ The repository tracks Python `# type: ignore` markers with [`gh-counter`](https:
   - [x] Node.js binding
   - [x] Python binding
 
+## Workspace layout
+
+The workspace still contains the historical short crate directories `c1` and
+`c2`. Their roles are:
+
+| Path | Package | Role |
+| --- | --- | --- |
+| `c1/` | `kitsuyui-rust-playground` | Binary crate for CLI and runtime experiments |
+| `c2/` | `kitsuyui-rust-playground-lib` | Library crate published to crates.io |
+| `checkpoint/` | `kitsuyui-rust-playground-checkpoint` | Checkpoint and snapshot experiments |
+| `python/` | Python package workspace | Python binding experiments |
+| `wasm/` | `kitsuyui-rust-playground-wasm` | WebAssembly binding experiments |
+
+Use descriptive directory names for new workspace members. The `c1` and `c2`
+names remain only to avoid churn in existing package paths.
+
 ## Development
 
 This repository uses [lefthook](https://lefthook.dev/) to run the same checks as CI
