@@ -5,7 +5,9 @@ use tracing_subscriber::EnvFilter;
 fn main() {
     init_tracing();
     show_openssl_version();
-    request_to_example_com();
+    if let Err(err) = request_to_example_com() {
+        error!(%err, "request to example.com failed");
+    }
     let digest = get_digest();
     info!(digest, "computed digest");
     match tokio::runtime::Runtime::new() {
@@ -44,25 +46,14 @@ async fn tokio_example() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn request_to_example_com() {
+fn request_to_example_com() -> Result<(), Box<dyn std::error::Error>> {
     let client = reqwest::blocking::Client::new();
-    match client.get("https://example.com").send() {
-        Ok(res) => {
-            info!(status = %res.status(), "received response");
-            debug!(headers = ?redacted_headers(res.headers()), "received response headers");
-            match res.text() {
-                Ok(body) => {
-                    debug!(body_bytes = body.len(), "received response body");
-                }
-                Err(err) => {
-                    error!(%err, "failed to read response body");
-                }
-            }
-        }
-        Err(err) => {
-            error!(%err, "request failed");
-        }
-    }
+    let res = client.get("https://example.com").send()?;
+    info!(status = %res.status(), "received response");
+    debug!(headers = ?redacted_headers(res.headers()), "received response headers");
+    let body = res.text()?;
+    debug!(body_bytes = body.len(), "received response body");
+    Ok(())
 }
 
 fn redacted_headers(headers: &HeaderMap) -> Vec<(String, String)> {
