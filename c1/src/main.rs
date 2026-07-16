@@ -57,7 +57,7 @@ fn request_to_example_com() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn redacted_headers(headers: &HeaderMap) -> Vec<(String, String)> {
-    headers
+    let mut headers = headers
         .iter()
         .map(|(name, value)| {
             let value = if is_sensitive_header(name) {
@@ -69,7 +69,9 @@ fn redacted_headers(headers: &HeaderMap) -> Vec<(String, String)> {
             };
             (name.as_str().to_owned(), value)
         })
-        .collect()
+        .collect::<Vec<_>>();
+    headers.sort_unstable();
+    headers
 }
 
 fn is_sensitive_header(name: &HeaderName) -> bool {
@@ -131,6 +133,25 @@ mod tests {
                 .find(|(name, _)| name == "content-type")
                 .map(|(_, value)| value),
             Some(&"text/html".to_owned())
+        );
+    }
+
+    #[test]
+    fn redacted_headers_are_sorted_for_stable_debug_output() {
+        let mut headers = HeaderMap::new();
+        headers.insert("x-zeta", "last".parse().unwrap());
+        headers.insert("authorization", "Bearer secret".parse().unwrap());
+        headers.insert("content-type", "text/html".parse().unwrap());
+
+        let redacted = redacted_headers(&headers);
+
+        assert_eq!(
+            redacted,
+            vec![
+                ("authorization".to_owned(), "<redacted>".to_owned()),
+                ("content-type".to_owned(), "text/html".to_owned()),
+                ("x-zeta".to_owned(), "last".to_owned()),
+            ]
         );
     }
 }
