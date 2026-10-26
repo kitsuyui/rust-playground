@@ -132,6 +132,9 @@ jobs:
             exit 1
           fi
 
+      - name: Remove wheels from dependency setup
+        run: python -c "from pathlib import Path; [p.unlink() for p in Path('../target/wheels').glob('*.whl')]"
+
       - name: packaging
         run: |
           uv run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
