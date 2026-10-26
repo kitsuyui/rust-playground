@@ -42,19 +42,19 @@ jobs:
             os: "ubuntu-latest"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.14"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.10"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.11"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.12"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.13"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.14"
             os: "macos-latest"
@@ -134,6 +134,16 @@ jobs:
 
       - name: Remove wheels from dependency setup
         run: python -c "from pathlib import Path; [p.unlink() for p in Path('../target/wheels').glob('*.whl')]"
+
+      - name: Verify macOS runner architecture
+        if: contains(matrix.rust_target, 'apple-darwin')
+        env:
+          RUST_TARGET: ${{ matrix.rust_target }}
+        run: |
+          expected="${RUST_TARGET%%-*}"
+          if [ "$expected" = aarch64 ]; then expected=arm64; fi
+          test "$(uname -m)" = "$expected"
+          python -c "import platform; assert platform.machine() == '$expected', platform.machine()"
 
       - name: packaging
         run: |
