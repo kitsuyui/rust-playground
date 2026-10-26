@@ -73,6 +73,10 @@ jobs:
         if: (matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-22.04') && matrix.package != ''
         timeout-minutes: 10
         run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            { printf "https://archive.ubuntu.com/ubuntu/\tpriority:1\n"; sed -E "s/(^|[[:space:]])priority:[^[:space:]]+/\\1/g; /^[[:space:]]*(#|$)/! s/$/\tpriority:2/" /etc/apt/apt-mirrors.txt; } | sudo tee /tmp/apt-mirrors-release.txt >/dev/null
+            sudo cp /tmp/apt-mirrors-release.txt /etc/apt/apt-mirrors.txt
+          fi
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y "$PACKAGE"
 
