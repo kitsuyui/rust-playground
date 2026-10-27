@@ -13,6 +13,7 @@ concurrency:
 
 permissions:
   contents: read
+  id-token: write
 
 env:
   # Use git tag when release, otherwise use commit hash.
@@ -49,6 +50,26 @@ jobs:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Check npm version for Trusted Publishing
+        run: |
+          node -e 'const [major, minor, patch] = process.argv[1].split(".").map(Number); if (major < 11 || (major === 11 && (minor < 5 || (minor === 5 && patch < 1)))) process.exit(1)' "$(npm --version)"
+
+      - name: Validate generated package metadata
+        if: github.event_name == 'release'
+        run: |
+          set -eu
+          expected_version="${GITHUB_REF_NAME#v}"
+          package_name=$(node -p "require('./pkg/package.json').name")
+          package_version=$(node -p "require('./pkg/package.json').version")
+          if [ "$package_name" != '@kitsuyui/kitsuyui-rust-playground-wasm' ]; then
+            echo "unexpected wasm package name: $package_name" >&2
+            exit 1
+          fi
+          if [ "$package_version" != "$expected_version" ]; then
+            echo "generated package version $package_version does not match release tag $GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+
       - name: Create tarball
         run: tar -czf pkg.tar.gz pkg
 
@@ -58,8 +79,7 @@ jobs:
           path: ./wasm/pkg.tar.gz
           retention-days: 1
 
-      - name: publish
+      - name: Publish to npm
         if: github.event_name == 'release' && !github.event.release.prerelease
-        run: wasm-pack publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        working-directory: wasm/pkg
+        run: npm publish --access public
