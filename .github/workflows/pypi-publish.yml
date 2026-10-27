@@ -42,19 +42,19 @@ jobs:
             os: "ubuntu-latest"
             rust_target: "x86_64-unknown-linux-gnu"
           - python: "3.14"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.10"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.11"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.12"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.13"
-            os: "macos-latest"
+            os: "macos-15-intel"
             rust_target: "x86_64-apple-darwin"
           - python: "3.14"
             os: "macos-latest"
@@ -92,6 +92,12 @@ jobs:
         working-directory: python
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Verify distribution versions
+        working-directory: .
+        run: python scripts/check-release-version.py
 
       - name: Set up Python
         id: setup-python
@@ -126,6 +132,19 @@ jobs:
             exit 1
           fi
 
+      - name: Remove wheels from dependency setup
+        run: python -c "from pathlib import Path; [p.unlink() for p in Path('../target/wheels').glob('*.whl')]"
+
+      - name: Verify macOS runner architecture
+        if: contains(matrix.rust_target, 'apple-darwin')
+        env:
+          RUST_TARGET: ${{ matrix.rust_target }}
+        run: |
+          expected="${RUST_TARGET%%-*}"
+          if [ "$expected" = aarch64 ]; then expected=arm64; fi
+          test "$(uname -m)" = "$expected"
+          python -c "import platform; assert platform.machine() == '$expected', platform.machine()"
+
       - name: packaging
         run: |
           uv run maturin build --release --strip --interpreter python${{ matrix.python }} --target ${{ matrix.rust_target }}
@@ -133,10 +152,9 @@ jobs:
       - name: test
         if: matrix.os != 'windows-latest'
         run: |
-          rm ../target/wheels/*
-          python3 -m venv .venv
-          source .venv/bin/activate
-          pip install .
+          python3 -m venv .wheel-test
+          source .wheel-test/bin/activate
+          pip install ../target/wheels/*.whl
           pip install pytest
           pytest tests
           python -c 'from kitsuyui_rust_playground import multiply_sum; assert multiply_sum(1, 2, 3) == "9"; print("OK")'
@@ -157,6 +175,7 @@ jobs:
       - uses: actions/download-artifact@v7
         with:
           pattern: wheels-${{ env.VERSION }}-*
+          merge-multiple: true
           path: target/wheels/
 
       - name: Publish distribution to GitHub Releases

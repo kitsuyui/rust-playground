@@ -60,6 +60,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Verify distribution versions
+        run: python scripts/check-release-version.py
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.arch }}
@@ -69,7 +74,14 @@ jobs:
 
       - name: Install APT packages
         if: matrix.os == 'ubuntu-latest' && matrix.package != ''
-        run: sudo apt-get update && sudo apt-get install -y "$PACKAGE"
+        timeout-minutes: 10
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            { printf "https://archive.ubuntu.com/ubuntu/\tpriority:1\n"; sed -E "s/(^|[[:space:]])priority:[^[:space:]]+/\\1/g; /^[[:space:]]*(#|$)/! s/$/\tpriority:2/" /etc/apt/apt-mirrors.txt; } | sudo tee /tmp/apt-mirrors-release.txt >/dev/null
+            sudo cp /tmp/apt-mirrors-release.txt /etc/apt/apt-mirrors.txt
+          fi
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y "$PACKAGE"
 
       - name: Build target
         run: cargo build --release --verbose --target "$ARCH"
