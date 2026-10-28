@@ -5,7 +5,12 @@ updates:
     schedule:
       interval: weekly
     cooldown:
-      default-days: 2
+      default-days: 3
+    groups:
+      pyo3:
+        patterns:
+          - "pyo3"
+          - "pyo3-*"
   - package-ecosystem: uv
     directory: /python
     schedule:
@@ -17,4 +22,4 @@ updates:
     schedule:
       interval: weekly
     cooldown:
-      default-days: 2
+      default-days: 3
