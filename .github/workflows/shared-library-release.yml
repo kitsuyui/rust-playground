@@ -94,7 +94,7 @@ jobs:
           tar -czf "./artifacts/lib-$NAME-$ARCH-$VERSION.tar.gz" "$LIB"
 
       - name: Archive artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: lib-${{ env.VERSION }}-${{ env.OS }}-${{ env.ARCH }}
           path: ./artifacts
