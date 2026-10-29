@@ -73,7 +73,7 @@ jobs:
       - name: Create tarball
         run: tar -czf pkg.tar.gz pkg
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: wasm-${{ env.VERSION }}
           path: ./wasm/pkg.tar.gz

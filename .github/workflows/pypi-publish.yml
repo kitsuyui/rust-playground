@@ -160,7 +160,7 @@ jobs:
           python -c 'from kitsuyui_rust_playground import multiply_sum; assert multiply_sum(1, 2, 3) == "9"; print("OK")'
           deactivate
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: wheels-${{ env.VERSION }}-${{ matrix.os }}-${{ matrix.python }}-${{ matrix.rust_target }}
           path: target/wheels/
