@@ -118,6 +118,6 @@ jobs:
 
       - name: Release
         if: github.event_name == 'release' && !github.event.release.prerelease
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: ./artifacts/*.tar.gz
